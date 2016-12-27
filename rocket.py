@@ -13,6 +13,9 @@ class Vector:
         y = self.y + other.y
         return Vector(x, y)
 
+    def __str__(self):
+        return "(" + str(self.x) + " " + str(self.y) + ")"
+
     # equivalent of Vector(0.0, 0.0)
     def nul(self):
         self.x, self.y = 0.0, 0.0

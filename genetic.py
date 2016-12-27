@@ -91,7 +91,7 @@ class Genetic:
             self._next_gen()
 
     # this method computes the routes of the rockets using visual simulation
-    def simulate_with_graphics(self, title="Rockets", width=800, height=600):
+    def simulate_with_graphics(self, title="Rockets", width=800, height=600, iteratons=100):
 
         # calculate an offset point to be able to draw negative positions
         reference_point = Vector(width / 4, height / 4)
@@ -111,10 +111,10 @@ class Genetic:
         counter = 0
 
         # iteration counter
-        gen_iter = 0
+        iter_cnt = 0
 
         # start the main loop
-        while not game_exit:
+        while not game_exit and iter_cnt < iteratons:
 
             # handle input events
             for event in pygame.event.get():
@@ -130,7 +130,7 @@ class Genetic:
                 counter = 0
 
                 # increment iter
-                gen_iter += 1
+                iter_cnt += 1
 
                 # compute the newer generation of the population
                 self._next_gen()
@@ -167,7 +167,7 @@ class Genetic:
 
             # display iteration number to the screen
             font = pygame.font.SysFont("monospace", 15)
-            label = font.render("iteration: " + str(gen_iter), 1, (255, 255, 0))
+            label = font.render("iteration: " + str(iter_cnt), 1, (255, 255, 0))
             game_display.blit(label, (width - 150, 10))
 
             # update the display
@@ -175,3 +175,18 @@ class Genetic:
 
             # sleep the mainloop for achieving the preset FPS value
             clock.tick(FPS)
+
+        # print statistics for the best child when the main loop is finished
+        self.print_stats()
+
+    # display stats for the best child
+    def print_stats(self):
+        print("--------------------------------")
+        print("Best member from the population:")
+        print("Fitness value: ", self.best_child.fitness(self.target_location))
+        print("Final location: ", self.best_child.location)
+        print("Distance from the target: ", self.best_child.location.dist(self.target_location))
+        print("Forces:")
+        for f in self.best_child.forces:
+            print(f)
+        print("--------------------------------")
